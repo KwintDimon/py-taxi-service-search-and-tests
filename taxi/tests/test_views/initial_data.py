@@ -1,7 +1,7 @@
 from django.urls import reverse
 
 DRIVERS_URLS = {
-    "test_driver_list_url":  reverse("taxi:driver-list"),
+    "test_driver_list_url": reverse("taxi:driver-list"),
     "test_driver_detail_url": reverse("taxi:driver-detail", kwargs={"pk": 1}),
     "test_driver_create_url": reverse("taxi:driver-create"),
     "test_driver_update_url": reverse("taxi:driver-update", kwargs={"pk": 1}),
@@ -13,7 +13,8 @@ DRIVERS_TEMPLATES_PATH = {
     reverse("taxi:driver-detail", kwargs={"pk": 1}): "taxi/driver_detail.html",
     reverse("taxi:driver-create"): "taxi/driver_form.html",
     reverse("taxi:driver-update", kwargs={"pk": 1}): "taxi/driver_form.html",
-    reverse("taxi:driver-delete", kwargs={"pk": 1}): "taxi/driver_confirm_delete.html",
+    reverse("taxi:driver-delete", kwargs={"pk": 1}):
+        "taxi/driver_confirm_delete.html",
 }
 
 DRIVERS_DATA = {
