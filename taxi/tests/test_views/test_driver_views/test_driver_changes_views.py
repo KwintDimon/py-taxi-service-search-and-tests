@@ -2,16 +2,8 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxi.tests.test_views.initial_data import (
-    DRIVER_CREATE_URL,
-    DRIVER_LIST_URL,
-    DRIVER_DELETE_URL,
-    DRIVERS_DATA
-)
-from taxi.forms import (
-    DriverCreationForm,
-    DriverLicenseUpdateForm
-)
+from taxi.forms import DriverCreationForm, DriverLicenseUpdateForm
+from taxi.tests.test_views.initial_data import DRIVERS_DATA
 
 
 class DriverChangesViewTest(TestCase):
@@ -25,7 +17,10 @@ class DriverChangesViewTest(TestCase):
         self.client.force_login(self.user)
 
     def test_successful_driver_creation(self):
-        response = self.client.post(DRIVER_CREATE_URL, data=DRIVERS_DATA)
+        response = self.client.post(
+            reverse("taxi:driver-create"),
+            data=DRIVERS_DATA
+        )
         driver = get_user_model().objects.get(username="test")
         self.assertEqual(response.status_code, 302)
 
@@ -41,14 +36,14 @@ class DriverChangesViewTest(TestCase):
 
     def test_unsuccessful_driver_creation(self):
         data = {"username": "test"}
-        response = self.client.post(DRIVER_CREATE_URL, data=data)
+        response = self.client.post(reverse("taxi:driver-create"), data=data)
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
             get_user_model().objects.filter(username="test").exists()
         )
 
     def test_driver_creation_form_displayed_on_page(self):
-        response = self.client.get(DRIVER_CREATE_URL)
+        response = self.client.get(reverse("taxi:driver-create"))
         self.assertIsInstance(response.context["form"], DriverCreationForm)
 
     def test_driver_update_form_is_valid(self):
@@ -66,18 +61,23 @@ class DriverChangesViewTest(TestCase):
             ),
             data={"license_number": "CBA54321"}
         )
-        self.assertRedirects(response, DRIVER_LIST_URL)
+        self.assertRedirects(response, reverse("taxi:driver-list"))
 
     def test_driver_successful_deletion_redirects_to_success_url(self):
-        self.client.post(DRIVER_CREATE_URL, data=DRIVERS_DATA)
+        self.client.post(reverse("taxi:driver-create"), data=DRIVERS_DATA)
         driver = get_user_model().objects.get(username="test")
         response = self.client.post(
             reverse("taxi:driver-delete", kwargs={"pk": driver.pk})
         )
-        self.assertRedirects(response, DRIVER_LIST_URL)
+        self.assertRedirects(
+            response,
+            reverse("taxi:driver-list")
+        )
 
     def test_successful_deletion_removes_driver_from_database(self):
-        self.client.post(DRIVER_DELETE_URL)
+        self.client.post(
+            reverse("taxi:driver-delete", kwargs={"pk": self.user.pk})
+        )
         self.assertFalse(get_user_model().objects.filter(
             pk=self.user.pk
         ).exists())
