@@ -14,10 +14,7 @@
     </div>
   </div>
 
-  <form method="get" action="" class="form-inline d-flex justify-content-center">
-    {{ search_form|crispy }}
-    <input type="submit" class="btn btn-outline-secondary" value="Search">
-  </form>
+  {% include "taxi/search_form.html" %}
   <br>
   
   {% if manufacturer_list %}

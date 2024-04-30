@@ -1,25 +1,19 @@
 from django.urls import reverse
 
-DRIVER_LIST_URL = reverse("taxi:driver-list")
-DRIVER_DETAIL_URL = reverse("taxi:driver-detail", kwargs={"pk": 1})
-DRIVER_CREATE_URL = reverse("taxi:driver-create")
-DRIVER_UPDATE_URL = reverse("taxi:driver-update", kwargs={"pk": 1})
-DRIVER_DELETE_URL = reverse("taxi:driver-delete", kwargs={"pk": 1})
-
 DRIVERS_URLS = {
-    "test_driver_list_url": DRIVER_LIST_URL,
-    "test_driver_detail_url": DRIVER_DETAIL_URL,
-    "test_driver_create_url": DRIVER_CREATE_URL,
-    "test_driver_update_url": DRIVER_UPDATE_URL,
-    "test_driver_delete_url": DRIVER_DELETE_URL,
+    "test_driver_list_url":  reverse("taxi:driver-list"),
+    "test_driver_detail_url": reverse("taxi:driver-detail", kwargs={"pk": 1}),
+    "test_driver_create_url": reverse("taxi:driver-create"),
+    "test_driver_update_url": reverse("taxi:driver-update", kwargs={"pk": 1}),
+    "test_driver_delete_url": reverse("taxi:driver-delete", kwargs={"pk": 1}),
 }
 
 DRIVERS_TEMPLATES_PATH = {
-    DRIVER_LIST_URL: "taxi/driver_list.html",
-    DRIVER_DETAIL_URL: "taxi/driver_detail.html",
-    DRIVER_CREATE_URL: "taxi/driver_form.html",
-    DRIVER_UPDATE_URL: "taxi/driver_form.html",
-    DRIVER_DELETE_URL: "taxi/driver_confirm_delete.html",
+    reverse("taxi:driver-list"): "taxi/driver_list.html",
+    reverse("taxi:driver-detail", kwargs={"pk": 1}): "taxi/driver_detail.html",
+    reverse("taxi:driver-create"): "taxi/driver_form.html",
+    reverse("taxi:driver-update", kwargs={"pk": 1}): "taxi/driver_form.html",
+    reverse("taxi:driver-delete", kwargs={"pk": 1}): "taxi/driver_confirm_delete.html",
 }
 
 DRIVERS_DATA = {
