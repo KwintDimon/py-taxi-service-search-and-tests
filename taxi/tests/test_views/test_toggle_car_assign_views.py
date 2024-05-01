@@ -4,7 +4,7 @@ from django.test import TestCase
 from taxi.models import Manufacturer, Car
 from taxi.tests.test_views.initial_data import (
     TOGGLE_URL,
-    CAR_DETAIL_URL
+    CAR_URLS
 )
 
 
@@ -39,4 +39,4 @@ class ToggleCarAssignTest(TestCase):
 
     def test_redirect_to_car_detail_page(self):
         response = self.client.get(TOGGLE_URL)
-        self.assertRedirects(response, CAR_DETAIL_URL)
+        self.assertRedirects(response, CAR_URLS["test_car_detail_url"])

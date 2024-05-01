@@ -3,10 +3,8 @@ from django.test import TestCase
 from django.urls import reverse
 
 from taxi.tests.test_views.initial_data import (
-    MANUFACTURER_CREATE_URL,
-    MANUFACTURER_LIST_URL,
-    MANUFACTURER_DELETE_URL,
-    MANUFACTURER_DATA
+    MANUFACTURER_DATA,
+    MANUFACTURER_URLS
 )
 from taxi.models import Manufacturer
 
@@ -28,7 +26,7 @@ class ManufacturerChangesViewTest(TestCase):
 
     def test_successful_manufacturer_creation(self):
         response = self.client.post(
-            MANUFACTURER_CREATE_URL,
+            MANUFACTURER_URLS["test_manufacturer_create_url"],
             data=MANUFACTURER_DATA
         )
         self.assertEqual(response.status_code, 302)
@@ -36,11 +34,17 @@ class ManufacturerChangesViewTest(TestCase):
         self.assertTrue(
             Manufacturer.objects.filter(name="test_name1").exists()
         )
-        self.assertRedirects(response, MANUFACTURER_LIST_URL)
+        self.assertRedirects(
+            response,
+            MANUFACTURER_URLS["test_manufacturer_list_url"]
+        )
 
     def test_unsuccessful_manufacturer_creation(self):
         data = {"name": "test"}
-        response = self.client.post(MANUFACTURER_CREATE_URL, data=data)
+        response = self.client.post(
+            MANUFACTURER_URLS["test_manufacturer_create_url"],
+            data=data
+        )
         self.assertEqual(response.status_code, 200)
         self.assertFalse(
             Manufacturer.objects.filter(name="test").exists()
@@ -54,7 +58,10 @@ class ManufacturerChangesViewTest(TestCase):
             ),
             data=MANUFACTURER_DATA
         )
-        self.assertRedirects(response, MANUFACTURER_LIST_URL)
+        self.assertRedirects(
+            response,
+            MANUFACTURER_URLS["test_manufacturer_list_url"]
+        )
 
     def test_manufacturer_successful_deletion_redirects_to_success_url(self):
         manufacturer = Manufacturer.objects.create(
@@ -67,10 +74,12 @@ class ManufacturerChangesViewTest(TestCase):
                 kwargs={"pk": manufacturer.pk}
             )
         )
-        self.assertRedirects(response, MANUFACTURER_LIST_URL)
+        self.assertRedirects(response,
+                             MANUFACTURER_URLS["test_manufacturer_list_url"]
+                             )
 
     def test_successful_deletion_removes_manufacturer_from_database(self):
-        self.client.post(MANUFACTURER_DELETE_URL)
+        self.client.post(MANUFACTURER_URLS["test_manufacturer_delete_url"])
         self.assertFalse(Manufacturer.objects.filter(
             pk=self.manufacturer.pk
         ).exists())
